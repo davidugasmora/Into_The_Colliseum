@@ -8,8 +8,6 @@ var player = null
 var last_h = 1
 var last_v = 1
 
-var current_direction = "none"
-
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 

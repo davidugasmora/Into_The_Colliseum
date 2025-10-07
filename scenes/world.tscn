@@ -1332,5 +1332,5 @@ tile_set = SubResource("TileSet_qfnet")
 
 [node name="player" parent="." groups=["player"] instance=ExtResource("5_71j4m")]
 
-[node name="troll_enemy" parent="." instance=ExtResource("6_qfnet")]
+[node name="troll_enemy" parent="." groups=["enemy"] instance=ExtResource("6_qfnet")]
 position = Vector2(179, 60)

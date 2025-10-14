@@ -3,70 +3,63 @@ extends CharacterBody2D
 const SPEED = 50
 const ACCELERATION = 3000
 
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
+var anim_name = ""
 var last_h = 1
 var last_v = 1
-
-var enemy_in_attack_range = false
-var enemy_attack_cooldown = true
-var health = 100
-var player_alive = true
-
+var horizontal = ""
+var vertical = ""
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
-func player_movement(input, delta):
+func player_movement(direction, delta):
 
-	if input: 
-		velocity = velocity.move_toward(input * SPEED , delta * ACCELERATION)
+	if direction: 
+		velocity = velocity.move_toward(direction * SPEED , delta * ACCELERATION)
 	else: 
 		velocity = Vector2.ZERO
 
-func select_anim_name(prefix, horizontal, vertical):
+func find_anim_direction(direction):
+	
+	if direction.x != 0:
+		last_h = sign(direction.x)
+	if direction.y != 0:
+		last_v = sign(direction.y)
+		
+	horizontal = sign(direction.x) if direction.x != 0 else last_h
+	vertical = sign(direction.y) if direction.y != 0 else last_v
+
+func select_anim_name(prefix):
+	
 	if vertical < 0:
 		return prefix + "_back_left" if horizontal < 0 else prefix + "_back_right"
 	else:
 		return prefix + "_front_left" if horizontal < 0 else prefix + "_front_right"
 
-func player_animation(input):
+func movement_animation(direction):
 	
-	var anim = $AnimatedSprite2D
-	
-	if input.x != 0:
-		last_h = sign(input.x)
-	if input.y != 0:
-		last_v = sign(input.y)
-		
-	var horizontal = sign(input.x) if input.x != 0 else last_h
-	var vertical = sign(input.y) if input.y != 0 else last_v
-	
-	var name = ""
-	
-	if input == Vector2.ZERO:
-		name = select_anim_name("idle", horizontal, vertical)
+	if direction == Vector2.ZERO:
+		anim_name = select_anim_name("idle")
 	else:
-		name = select_anim_name("walk", horizontal, vertical)
+		anim_name = select_anim_name("walk")
 		
-	if anim.animation != name or not anim.is_playing():
-		anim.play(name)
+	if anim.animation != anim_name or not anim.is_playing():
+		anim.play(anim_name)
 
+func attack_animation():
 
-func _on_player_hitbox_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemy_in_attack_range = true
-
-func _on_player_hitbox_body_exited(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemy_in_attack_range = false
-
-
-func enemy_attack():
-	pass
-
+	if Input.is_action_pressed("Attack"):
+		anim_name = select_anim_name("attack")
+		anim.play(anim_name)
+		
 
 func _physics_process(delta):
 
-	var input = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
-	player_movement(input, delta)
-	player_animation(input)
+	var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
+	
+	player_movement(direction, delta)
+	find_anim_direction(direction)
+	movement_animation(direction)
+	attack_animation()
 	move_and_slide()

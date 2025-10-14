@@ -1,4 +1,4 @@
-[gd_scene load_steps=111 format=3 uid="uid://0ty52vfv0jru"]
+[gd_scene load_steps=110 format=3 uid="uid://0ty52vfv0jru"]
 
 [ext_resource type="Script" uid="uid://d1f8mftip6g0q" path="res://scripts/troll_enemy.gd" id="1_fy0be"]
 [ext_resource type="Texture2D" uid="uid://bao7snk3iudtv" path="res://art/sprites/troll_enemy/TrollDie.png" id="1_t2fb2"]
@@ -773,9 +773,6 @@ radius = 3.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_4b7x2"]
 radius = 43.011627
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fy0be"]
-radius = 7.0
-
 [node name="troll_enemy" type="CharacterBody2D"]
 script = ExtResource("1_fy0be")
 
@@ -794,12 +791,6 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
 shape = SubResource("CircleShape2D_4b7x2")
-
-[node name="troll_enemy_hitbox" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="troll_enemy_hitbox"]
-position = Vector2(0, -4)
-shape = SubResource("CircleShape2D_fy0be")
 
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]

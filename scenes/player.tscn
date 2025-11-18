@@ -1,10 +1,12 @@
-[gd_scene load_steps=116 format=3 uid="uid://dyvhavied1rkh"]
+[gd_scene load_steps=120 format=3 uid="uid://dyvhavied1rkh"]
 
 [ext_resource type="Script" uid="uid://b7ibpowq5jym6" path="res://scripts/player.gd" id="1_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://cukwl77mvwdft" path="res://art/sprites/player_character/HumanIdle.png" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://woayvwvtlyqy" path="res://art/sprites/player_character/HumanSpinDie.png" id="2_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cqlj1ovcvg8io" path="res://art/sprites/player_character/HumanAttack.png" id="2_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://ouaqhtvpmbi4" path="res://art/sprites/player_character/HumanWalk.png" id="3_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://o484mb1xk8p1" path="res://scenes/hitbox.tscn" id="6_fjrip"]
+[ext_resource type="PackedScene" uid="uid://ct6eilmm218kf" path="res://scenes/hurtbox.tscn" id="7_smehm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a7i4v"]
 atlas = ExtResource("2_tuyoq")
@@ -441,113 +443,113 @@ region = Rect2(96, 0, 32, 32)
 [sub_resource type="SpriteFrames" id="SpriteFrames_ry8ed"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_a7i4v")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_b5l0c")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_2a33p")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_reqs7")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_back_left",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_2yjfb")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_dnnjp")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_wqna8")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_l7gmo")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_back_right",
 "speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_kft7l")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_2s4os")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_2em0j")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_qe2k6")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_front_left",
 "speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_edwuo")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_5eiju")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_uukdq")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_3k3j0")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_front_right",
 "speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_tuyoq")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_ry8ed")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_au8ao")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_w5j5w")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_cbf1i")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_4vfid")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_ljgr3")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_fr8ja")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_gvmy4")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_fcu33")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_qmsq4")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_5vs2b")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
-"speed": 5.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -833,6 +835,13 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
 radius = 1.3462912
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
+radius = 4.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fjrip"]
+radius = 2.2214053
+height = 12.644392
+
 [node name="player" type="CharacterBody2D"]
 collision_layer = 3
 script = ExtResource("1_qhqgy")
@@ -845,3 +854,29 @@ offset = Vector2(0, -2.5)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1)
 shape = SubResource("CircleShape2D_qhqgy")
+
+[node name="hurt_box" parent="." groups=["player"] instance=ExtResource("7_smehm")]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurt_box"]
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_fjrip")
+debug_color = Color(0.8853092, 0.3143518, 0.29119122, 0.41960785)
+
+[node name="hit_box" parent="." instance=ExtResource("6_fjrip")]
+collision_layer = 0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="hit_box"]
+shape = SubResource("CapsuleShape2D_fjrip")
+debug_color = Color(0.8467896, 0.24015227, 0.71990204, 0.41960785)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+limit_smoothed = true
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_top_margin = 0.1

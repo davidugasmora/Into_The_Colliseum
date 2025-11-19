@@ -37,6 +37,7 @@ func _physics_process(delta):
 	
 	if player_chase:
 		dir = (player.global_position - global_position).normalized()
+	_update_health()
 	
 	match state:
 		State.DIE:
@@ -168,3 +169,20 @@ func _enter_die():
 	anim.play("death")
 	await get_tree().create_timer(1.3).timeout
 	queue_free()
+
+func _update_health():
+	
+	var health_bar = $health_bar
+	health_bar.value = health
+	
+	if health >= 3:
+		health_bar.visible = false
+	else:
+		health_bar.visible = true
+
+func _on_regen_timer_timeout() -> void:
+	if health < 3:
+		health += 1
+	
+	if health <= 0:
+		health = 0

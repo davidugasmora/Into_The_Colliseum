@@ -30,6 +30,7 @@ func _ready() -> void:
 func _physics_process(delta):
 
 	var dir = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
+	_update_health()
 	
 	if state != State.ATTACK and Input.is_action_just_pressed("attack") and state != State.DIE:
 		_enter_attack()
@@ -133,6 +134,24 @@ func take_dmg(damage : int) -> void:
 	
 	if health <= 0:
 		_enter_die()
+
+func _update_health():
+	
+	var health_bar = $health_bar
+	health_bar.value = health
+	
+	if health >= 10:
+		health_bar.visible = false
+	else:
+		health_bar.visible = true
+
+func _on_regen_timer_timeout() -> void:
+	if health < 10:
+		health += 1
+	
+	if health <= 0:
+		health = 0
+		
 
 func _enter_die():
 	

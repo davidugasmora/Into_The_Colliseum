@@ -1481,3 +1481,9 @@ position = Vector2(545, 500)
 
 [node name="troll_enemy" parent="." groups=["enemy"] instance=ExtResource("6_qfnet")]
 position = Vector2(722, 565)
+
+[node name="troll_enemy2" parent="." instance=ExtResource("6_qfnet")]
+position = Vector2(507, 218)
+
+[node name="troll_enemy3" parent="." instance=ExtResource("6_qfnet")]
+position = Vector2(575, 219)

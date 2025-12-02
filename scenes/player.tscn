@@ -848,7 +848,7 @@ script = ExtResource("1_qhqgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ry8ed")
-animation = &"idle_front_right"
+animation = &"walk_front_right"
 offset = Vector2(0, -2.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

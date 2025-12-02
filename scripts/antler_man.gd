@@ -10,10 +10,17 @@ var state : State = State.IDLE
 
 @onready var anim : AnimatedSprite2D = $AnimatedSprite2D
 
-var last_h = 1
-var last_v = 1
-var facing_h = 1
-var facing_v = 1
+enum Facing {
+	FRONT,
+	BACK,
+	LEFT,
+	RIGHT,
+	FRONT_LEFT,
+	FRONT_RIGHT,
+	BACK_LEFT,
+	BACK_RIGHT
+}
+var facing : Facing = Facing.FRONT
 
 func _ready() -> void:
 	
@@ -21,58 +28,92 @@ func _ready() -> void:
 
 func _physics_process(delta):
 
-	var dir = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
+	var input_dir : Vector2 = Input.get_vector("left","right","up","down")
 	
 	match state:
 		State.MOVE, State.IDLE:
-			_update_facing(dir)
-			_move(dir, delta)
-			_play_move_or_idle(dir)
-			move_and_slide()
+			_move_character(input_dir, delta)
+			_update_facing(input_dir)
+			_update_animation(input_dir)
 
-func _move(dir, delta : float) -> void:
+func _move_character(input_dir : Vector2, delta : float) -> void:
 
-	if dir != Vector2.ZERO: 
+	if input_dir != Vector2.ZERO: 
 		state = State.MOVE
-		velocity = velocity.move_toward(dir * SPEED , delta * ACCELERATION)
+		velocity = velocity.move_toward(input_dir * SPEED , delta * ACCELERATION)
 	else: 
 		state = State.IDLE
 		velocity = Vector2.ZERO
-
-func _update_facing(dir : Vector2) -> void:
 	
-	if dir.x != 0:
-		last_h = sign(dir.x)
-	if dir.y != 0:
-		last_v = sign(dir.y)
-		
-	facing_h = last_h
-	facing_v = last_v
+	move_and_slide()
 	
-func _play_move_or_idle(dir : Vector2) -> void:
+func _update_facing(input_dir : Vector2) -> void:
 	
-	var prefix := "walk" if dir != Vector2.ZERO else "idle"
+	if input_dir == Vector2.ZERO:
+		return
 	
-	var anim_dir := dir
-	if anim_dir == Vector2.ZERO:
-		anim_dir = Vector2(facing_h, facing_v)
+	var d = input_dir.normalized()
+	var x = d.x
+	var y = d.y
+	var ax = abs(x)
+	var ay = abs(y)
 	
-	_play_if_changed(_select_anim_name(prefix, anim_dir))
+	var bias := 1.2
 	
-func _select_anim_name(prefix: String, dir: Vector2) -> String:
+	if ay > ax * bias:
+		if y < 0.0:
+			facing = Facing.BACK
+		else:
+			facing = Facing.FRONT
 	
-	if dir.x == 0 and dir.y != 0:
-		return prefix + "_left" if dir.x < 0 else prefix + "_right"
+	elif ax > ay * bias:
+		if x < 0.0:
+			facing = Facing.LEFT
+		else:
+			facing = Facing.RIGHT
 	
-	if dir.y == 0 and dir.x != 0:
-		return prefix + "_back" if dir.y < 0 else prefix + "_front"
-	
-	if dir.y < 0:
-		return prefix + "_back_left" if dir.x < 0 else prefix + "_back_right"
 	else:
-		return prefix + "_front_left" if dir.x < 0 else prefix + "_front_right"
+		if y < 0.0:
+			if x < 0.0:
+				facing = Facing.BACK_LEFT
+			else:
+				facing = Facing.BACK_RIGHT
+		else:
+			if x < 0.0:
+				facing = Facing.FRONT_LEFT
+			else:
+				facing = Facing.FRONT_RIGHT
 
-func _play_if_changed(anim_name: String) -> void:
+func _facing_to_anim_name(prefix : String) -> String:
+	match facing:
+		Facing.FRONT:
+			return "%s_%s" % [prefix, "front"]
+		Facing.BACK:
+			return "%s_%s" % [prefix, "back"]
+		Facing.LEFT:
+			return "%s_%s" % [prefix, "left"]
+		Facing.RIGHT:
+			return "%s_%s" % [prefix, "right"]
+		Facing.FRONT_LEFT:
+			return "%s_%s_%s" % [prefix, "front", "left"]
+		Facing.FRONT_RIGHT:
+			return "%s_%s_%s" % [prefix, "front", "right"]
+		Facing.BACK_LEFT:
+			return "%s_%s_%s" % [prefix, "back", "left"]
+		Facing.BACK_RIGHT:
+			return "%s_%s_%s" % [prefix, "back", "right"]
+		_:
+			return "%s_%s" % [prefix, "front"]
 
+func _play_if_changed(anim_name : String) -> void:
+	
 	if anim.animation != anim_name or not anim.is_playing():
 		anim.play(anim_name)
+
+func _update_animation(input_dir : Vector2) -> void:
+	
+	var is_moving = input_dir != Vector2.ZERO
+	var prefix = "walk" if is_moving else "idle"
+	var anim_name = _facing_to_anim_name(prefix)
+	
+	_play_if_changed(anim_name)

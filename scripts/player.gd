@@ -34,7 +34,6 @@ func _physics_process(delta):
 	
 	if state != State.ATTACK and Input.is_action_just_pressed("attack") and state != State.DIE:
 		_enter_attack()
-		return
 	
 	match state:
 		State.DIE:
@@ -144,14 +143,6 @@ func _update_health():
 		health_bar.visible = false
 	else:
 		health_bar.visible = true
-
-func _on_regen_timer_timeout() -> void:
-	if health < 10:
-		health += 1
-	
-	if health <= 0:
-		health = 0
-		
 
 func _enter_die():
 	
